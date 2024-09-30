@@ -16,15 +16,17 @@ class NoteFactory extends Factory
      */
     public function definition(): array
     {
+        $due= now()->addMonth()->addDays(rand(0, 30));
+        $created = now()->addDays(rand(0, 30));
         return [
             'user_id' => \App\Models\User::factory(),
             'category_id' => \App\models\Category::inRandomOrder()->first('id'),
             'title' => $this->faker->sentence,
             'description' => $this->faker->paragraph,
-            'due_date' => now()->addMonth(),
+            'due_date' => $due,
             'image' => null,
-            'created_at' => now(),
-            'updated_at' => now(),
+            'created_at' => $created,
+            'updated_at' => $created,
         ];
     }
 }

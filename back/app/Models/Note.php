@@ -12,8 +12,9 @@ class Note extends Model
 
     protected $fillable = [
         'user_id',
+        'category_id',
         'title',
-        'content',
+        'description',
         'due_date', 
         'image',    
     ];
