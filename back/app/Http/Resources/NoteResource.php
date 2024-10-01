@@ -18,9 +18,9 @@ class NoteResource extends JsonResource
         return[
             'id' => $this->id,
             'title' => $this->title,
-            'description' => $this->content,
+            'description' => $this->description,
             'due_date' => $this->due_date ? Carbon::parse($this->due_date)->format('Y-m-d') : null, 
-            'image_url' => $this->image, 
+            'image' => $this->image, 
             'created_at' => $this->created_at->toDateTimeString(),
             'updated_at' => $this->updated_at->toDateTimeString(),
             'category' => $this->whenLoaded('category'), 

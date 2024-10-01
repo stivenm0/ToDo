@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import DashboardView from '../views/DashboardView.vue'
+import { useStore } from 'vuex'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -8,12 +9,14 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: HomeView
+      component: HomeView,
+      meta: { noAuth: true }
     },
     {
       path: '/dashboard',
       name: 'dashboard',
-      component: DashboardView
+      component: DashboardView,
+      meta: { requiresAuth: true }
     },
     {
       path: '/about',
@@ -25,5 +28,21 @@ const router = createRouter({
     }
   ]
 })
+
+router.beforeEach((to, from) => {
+  const token= useStore().state.a.authToken;
+//  useStore().dispatch('b/subModule/login')
+//  useStore().dispatch('b/login2')
+
+  console.log(token);
+  
+   
+  //  explicitly return false to cancel the navigation
+   if(to.meta.requiresAuth && !token) return '/'
+ 
+    if(to.meta.noAuth && token) return '/dashboard'
+ 
+   return true
+ })
 
 export default router

@@ -12,6 +12,10 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import {useStore} from 'vuex'; 
+import ErrorsForm from '../commons/ErrorsForm.vue'
+
+const store = useStore()
 
 const formSchema = toTypedSchema(z.object({
   email: z.string().min(2).max(50).email(),
@@ -21,22 +25,25 @@ const formSchema = toTypedSchema(z.object({
 const {handleSubmit} = useForm({
   validationSchema: formSchema,
 })
+ 
 
-const onSubmit = handleSubmit((values) => {
-console.log(values);
+const onSubmit = handleSubmit((values) => {  
+  store.dispatch('a/handleLogin', values);
 })
 </script>
 
 <template>
-  <form class="w-2/3 space-y-3 mx-auto" @submit="onSubmit">
-    <h1 class="text-4xl text-center mb-2 font-extrabold">
+  <form class="w-2/3 mx-auto space-y-3" @submit="onSubmit">
+    <h1 class="mb-2 text-4xl font-extrabold text-center">
          Log in
     </h1>
+    <ErrorsForm :errors="$store.state.a.authErrors"/>
     <FormField v-slot="{ componentField }" name="email">
       <FormItem>
         <FormLabel>Email</FormLabel>
         <FormControl>
-          <Input type="email" placeholder="Email" v-bind="componentField" />
+          <Input type="email" placeholder="Email" v-bind="componentField" 
+          autocomplete="email"/>
         </FormControl>
         <FormMessage />
       </FormItem>
@@ -45,7 +52,8 @@ console.log(values);
       <FormItem>
         <FormLabel>Password</FormLabel>
         <FormControl>
-          <Input type="password" placeholder="Password" v-bind="componentField" />
+          <Input type="password" placeholder="Password" v-bind="componentField" 
+          autocomplete="current-password"/>
         </FormControl>
         <FormMessage />
       </FormItem>

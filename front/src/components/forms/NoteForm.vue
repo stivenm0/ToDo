@@ -24,6 +24,11 @@ import {
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import InputDate from './InputDate.vue'
+import { useStore } from 'vuex'
+
+
+const store =useStore()
+
 
 const formSchema = toTypedSchema(z.object({
   title: z.string().min(2).max(50),
@@ -35,6 +40,11 @@ const formSchema = toTypedSchema(z.object({
 const form = useForm({
   validationSchema: formSchema,
 })
+
+form.setValues(store.state.m.note);
+
+console.log(form);
+
 
 const onSubmit = form.handleSubmit((values) => {
   console.log(values);

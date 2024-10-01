@@ -3,6 +3,7 @@ import MainItem from './components/items/MainItem.vue';
 </script>
 
 <template>
+  <!-- <Toaster /> -->
   <MainItem/>
   <RouterView />
 </template>

@@ -1,7 +1,8 @@
 import client from '@/lib/Client';
-import { createStore } from 'vuex';
+import router from '@/router';
 
-export default createStore({
+export default {
+  namespaced: true,
   state: {
     authUser: JSON.parse(localStorage.getItem('user') || null),
     authErrors: [],
@@ -16,12 +17,17 @@ export default createStore({
     },
     setNotes(state, notes){
       state.notes = notes;
+    },
+    setErrors(state, errors){
+      state.authErrors = errors;
     }
   },
   actions: {
-      async handleLogin(data) {
+      async handleLogin({ commit }, data) {
         this.authErrors = []
   
+        console.log(data);
+        
         try {
           const res = await client.post('/login', {
             email: data.email,
@@ -34,16 +40,17 @@ export default createStore({
           localStorage.setItem('token', resD.token)
           localStorage.setItem('user', JSON.stringify(resD.user))
   
+          router.go('/dashboard')
         } catch (error) {
+          console.log(error);
+          
           if (error.response?.status === 422) {
-            this.authErrors = error.response.data.errors
-          }else{
-            this.authErrors[0] = [error.response?.data.error]
+            commit('setErrors',error.response.data.errors)
           }
         }
       },
   
-      async handleRegister(data) {
+      async handleRegister({ commit }, data) {
         this.authErrors = []
   
         try {
@@ -60,21 +67,25 @@ export default createStore({
           localStorage.setItem('token', resD.token)
           localStorage.setItem('user', JSON.stringify(resD.user))
   
+          router.go('/dashboard')
         } catch (error) {
           if (error.response?.status === 422) {
-            this.authErrors = error.response.data.errors
+             commit('setErrors',error.response.data.errors)
           }
         }
       },
   
       async handleLogout() {
+        
         await client.post('/logout')
         this.authUser = null
         this.authToken = false
         localStorage.removeItem('user');
         localStorage.removeItem('token');
+
+        router.go('/')
   
     }
   }
     
-});
+};

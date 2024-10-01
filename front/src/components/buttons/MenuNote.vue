@@ -9,11 +9,15 @@ import {
 } from '@/components/ui/dropdown-menu'
 import {useStore} from 'vuex'; 
 
+const {note} = defineProps(['note'])
+
 const store = useStore()
 
-const open = (type)=>{
-    store.commit('setOpen'),
-    store.commit('setType', type)
+
+
+const open = (type)=>{  
+    store.commit('m/setOpen'),
+    store.commit('m/setType', {type, note })
 }
 </script>
 
