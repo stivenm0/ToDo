@@ -18,29 +18,24 @@ const router = createRouter({
       component: DashboardView,
       meta: { requiresAuth: true }
     },
-    {
-      path: '/about',
-      name: 'about',
+    // {
+      // path: '/about',
+      // name: 'about',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import('../views/AboutView.vue')
-    }
+      // component: () => import('../views/AboutView.vue')
+    // }
   ]
 })
 
-router.beforeEach((to, from) => {
+router.beforeEach((to) => {
   const token= useStore().state.a.authToken;
-//  useStore().dispatch('b/subModule/login')
-//  useStore().dispatch('b/login2')
-
-  console.log(token);
-  
    
   //  explicitly return false to cancel the navigation
-   if(to.meta.requiresAuth && !token) return '/'
+  if(to.meta.requiresAuth && !token) return '/'
  
-    if(to.meta.noAuth && token) return '/dashboard'
+  if(to.meta.noAuth && token) return '/dashboard'
  
    return true
  })

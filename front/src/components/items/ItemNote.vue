@@ -13,7 +13,7 @@ defineProps(['note'])
                 <AvatarImage :src="note.image ? note.image : ''" alt="@radix-vue" />
                 <AvatarFallback>NN</AvatarFallback>
             </Avatar>
-            <p class="truncate ...  ">
+            <p class="truncate ...  text-left">
                 {{ note.title }}
             </p>
             <MenuNote :note="note" />

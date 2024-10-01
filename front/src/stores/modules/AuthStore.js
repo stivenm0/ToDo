@@ -4,9 +4,9 @@ import router from '@/router';
 export default {
   namespaced: true,
   state: {
-    authUser: JSON.parse(localStorage.getItem('user') || null),
+    authUser: JSON.parse(sessionStorage.getItem('user') || null),
     authErrors: [],
-    authToken: localStorage.getItem('token') || null,
+    authToken: sessionStorage.getItem('token') || null,
   },
   mutations: {
     setOpen(state) {
@@ -24,10 +24,7 @@ export default {
   },
   actions: {
       async handleLogin({ commit }, data) {
-        this.authErrors = []
-  
-        console.log(data);
-        
+        this.authErrors = []     
         try {
           const res = await client.post('/login', {
             email: data.email,
@@ -37,8 +34,8 @@ export default {
           this.authUser = resD.user;
           this.authToken = resD.token;
   
-          localStorage.setItem('token', resD.token)
-          localStorage.setItem('user', JSON.stringify(resD.user))
+          sessionStorage.setItem('token', resD.token)
+          sessionStorage.setItem('user', JSON.stringify(resD.user))
   
           router.go('/dashboard')
         } catch (error) {
@@ -76,12 +73,11 @@ export default {
       },
   
       async handleLogout() {
-        
         await client.post('/logout')
         this.authUser = null
         this.authToken = false
-        localStorage.removeItem('user');
-        localStorage.removeItem('token');
+        sessionStorage.removeItem('user');
+        sessionStorage.removeItem('token');
 
         router.go('/')
   

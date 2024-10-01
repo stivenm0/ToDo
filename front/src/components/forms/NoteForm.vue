@@ -23,7 +23,6 @@ import {
 
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
-import InputDate from './InputDate.vue'
 import { useStore } from 'vuex'
 
 
@@ -31,8 +30,8 @@ const store =useStore()
 
 
 const formSchema = toTypedSchema(z.object({
-  title: z.string().min(2).max(50),
-  description: z.string().min(2).max(50),
+  title: z.string().min(2).max(255),
+  description: z.string().min(2).max(1000),
   due_date: z.any(),
   category_id: z.any()
 }))
@@ -41,13 +40,35 @@ const form = useForm({
   validationSchema: formSchema,
 })
 
-form.setValues(store.state.m.note);
 
-console.log(form);
+if(store.state.m.type === 'edit'){
+  const note = store.state.m.note;
+  // console.log(note);
+  
+  form.setValues({...note, category_id: note.category_id });
+}
+
+// console.log(form);
 
 
 const onSubmit = form.handleSubmit((values) => {
+  const { note } = store.state.m
+console.log(note);
   console.log(values);
+  
+  const { type } = store.state.m
+  const { id } = store.state.a.authUser
+  
+  if(type === 'create'){
+    store.dispatch('m/createNote', {...values, user_id: id})
+  }else{
+    if(!values.category_id){
+      values.category_id = note.category.id;
+    }
+
+    store.dispatch('m/editNote', {...values, user_id: id})
+  }
+  
 })
 </script>
 
@@ -75,28 +96,28 @@ const onSubmit = form.handleSubmit((values) => {
       <FormItem>
         <FormLabel>Due Date</FormLabel>
         <FormControl>
-          <InputDate :dat="componentField" />
+          <Input type="date" v-bind="componentField" :min="new Date().toISOString().split('T')[0]" />
         </FormControl>
         <FormMessage />
       </FormItem>
     </FormField>
     <FormField v-slot="{ componentField }" name="category_id">
       <FormItem>
-        <FormLabel>Category</FormLabel>
+        <FormLabel>Category </FormLabel>
         <FormControl>
-          <Select v-bind="componentField">
+          <Select v-bind="componentField" >
             <SelectTrigger>
-              <SelectValue placeholder="Select a Category" />
+              <SelectValue 
+              :placeholder="$store.state.m.note.category ? $store.state.m.note.category.name : 'Select a Category'"/>
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                <SelectLabel>Category</SelectLabel>
-                <template v-for="category in $store.state.categories" :key="category.id">
-                  <SelectItem :value="category.id" >
+                <SelectLabel>Category </SelectLabel>
+                <template v-for="category in $store.state.m.categories" :key="category.id">
+                  <SelectItem :value="category.id.toString()" selected=} >
                     {{category.name}}
                   </SelectItem>
                 </template>
-
               </SelectGroup>
             </SelectContent>
           </Select>
@@ -114,7 +135,7 @@ const onSubmit = form.handleSubmit((values) => {
       </FormItem>
     </FormField>
     <Button type="submit" class="w-full uppercase">
-      {{ $store.state.type }}
+      {{ $store.state.m.type }}
     </Button>
   </form>
 </template>

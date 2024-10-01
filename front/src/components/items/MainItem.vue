@@ -8,6 +8,7 @@ import {
 } from '@/components/ui/sheet'
 import NoteForm from '../forms/NoteForm.vue';
 import NoteShow from './NoteShow.vue';
+import DeleteForm from '../forms/DeleteForm.vue';
 </script>
 
 <template>
@@ -25,6 +26,9 @@ import NoteShow from './NoteShow.vue';
             </template>
             <template v-if="$store.state.m.type === 'show'">
               <NoteShow/>
+            </template>
+            <template v-if="$store.state.m.type === 'delete'">
+              <DeleteForm/>
             </template>
           </div>
         </SheetDescription>
