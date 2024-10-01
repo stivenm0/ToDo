@@ -7,6 +7,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import {useStore} from 'vuex'; 
+
+const store = useStore()
+
+const open = (type)=>{
+    store.commit('setOpen'),
+    store.commit('setType', type)
+}
 </script>
 
 <template>
@@ -17,8 +25,11 @@ import {
     <DropdownMenuContent>
       <DropdownMenuLabel>Options</DropdownMenuLabel>
       <DropdownMenuSeparator />
-      <DropdownMenuItem @click="$store.commit('setOpen')">Edit</DropdownMenuItem>
-      <DropdownMenuItem @click="$store.commit('setOpen')">Delete</DropdownMenuItem>
+      <DropdownMenuItem @click="open('show')">show</DropdownMenuItem>
+
+      <DropdownMenuItem @click="open('edit')">Edit</DropdownMenuItem>
+
+      <DropdownMenuItem @click="open('delete')">Delete</DropdownMenuItem>
     </DropdownMenuContent>
   </DropdownMenu>
 </template>

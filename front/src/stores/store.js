@@ -2,14 +2,32 @@ import { createStore } from 'vuex';
 
 export default createStore({
   state: {
-    open:true // Aquí guardaremos nuestras tareas (puedes cambiar según tus necesidades)
+    isOpen: false ,
+    type: '' ,
+    categories: [
+      { id: 1, name: 'Work' },
+      { id: 2, name: 'Personal' },
+      { id: 3, name: 'Shopping' },
+      { id: 4, name: 'Health' },
+      { id: 5, name: 'Fitness' },
+      { id: 6, name: 'Travel' },
+      { id: 7, name: 'Education' },
+      { id: 8, name: 'Finance' },
+      { id: 9, name: 'Projects' },
+      { id: 10, name: 'Miscellaneous' },
+  ],
+    notes: []
   },
   mutations: {
-    // Mutaciones para modificar el estado
     setOpen(state) {
-      state.open = !state.open;
+      state.isOpen = !state.isOpen;
     },
-
+    setType(state, type){
+      state.type = type;
+    },
+    setNotes(state, notes){
+      state.notes = notes;
+    }
   },
 //   actions: {
 //     // Acciones para realizar operaciones asíncronas
