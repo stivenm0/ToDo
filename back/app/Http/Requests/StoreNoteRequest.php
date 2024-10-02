@@ -25,7 +25,7 @@ class StoreNoteRequest extends FormRequest
             'title' => 'required|string|max:255', 
             'description' => 'required|string',         
             'due_date' => 'nullable|date|after:now',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', 
+            'image' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:10000', 
             'user_id' => 'required|exists:users,id', 
             'category_id' => 'required|exists:categories,id',
         ];

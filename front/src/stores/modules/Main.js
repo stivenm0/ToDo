@@ -20,8 +20,10 @@ export default {
       { id: 9, name: "Projects" },
       { id: 10, name: "Miscellaneous" },
     ],
-    notes: [],
+    notes: false,
     note: {},
+    errors: [],
+    orderBy: 'created_at'
   },
   mutations: {
     setOpen(state) {
@@ -34,22 +36,29 @@ export default {
     setNotes(state, notes) {
       state.notes = notes;
     },
+    setErrors(state, errors) {
+      state.errors = errors;
+    },
+    setOrderBy(state, orderBy) {
+      state.orderBy = orderBy;
+    },
 
   },
   actions: {
-    async getNotes({ commit }) {
+    setOrder({ commit, dispatch }, order){
+      commit('setOrderBy', order)
+      dispatch('getNotes');
+    },
+    async getNotes({ commit, state }) {
       let res = await client.get("/notes", {
-        // params:{
-        //     page: newQ.page ? newQ.page : 1
-        // }
+        params:{ sort: state.orderBy }
       });
-      console.log(res.data.data);
+      
       commit("setNotes", res.data.data);
     },
 
     async createNote({ commit, dispatch }, data) {
       let res = await client.post("/notes", data);
-      console.log(res.data);
 
       if (res.status === 201) {
         commit("setOpen");
@@ -61,9 +70,7 @@ export default {
     },
 
     async editNote({ commit,dispatch, state }, data) {
-      console.log(data);
       let res = await client.put(`/notes/${state.note.id}`, data);
-      console.log(res);
 
       if (res.status === 200) {
         commit("setOpen");
@@ -86,5 +93,23 @@ export default {
 
       toast({title: 'Failed Delete'});
     },
+
+    async uploadImage({ state, commit, dispatch }, data){
+      commit('setErrors', [])
+  
+      try {
+        await client.post(`/notes/${state.note.id}?_method=PUT`, data)
+
+        commit("setOpen");
+        dispatch('getNotes');
+        toast({title: 'Success Add Image'});
+        
+      } catch (error) {
+        if (error.response?.status === 422) {
+           commit('setErrors',error.response.data.errors)
+        }
+        toast({title: 'Failed Add Image'});
+      }
+    }
   },
 };

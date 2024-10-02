@@ -29,11 +29,14 @@ const open = (type)=>{
     <DropdownMenuContent>
       <DropdownMenuLabel>Options</DropdownMenuLabel>
       <DropdownMenuSeparator />
-      <DropdownMenuItem @click="open('show')">show</DropdownMenuItem>
+      <DropdownMenuItem @click="open('image')">Add Image</DropdownMenuItem>
+
+      <DropdownMenuItem @click="open('show')">Show</DropdownMenuItem>
 
       <DropdownMenuItem @click="open('edit')">Edit</DropdownMenuItem>
 
       <DropdownMenuItem @click="open('delete')">Delete</DropdownMenuItem>
+
     </DropdownMenuContent>
   </DropdownMenu>
 </template>

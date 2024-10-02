@@ -7,8 +7,12 @@
       <h4 class="text-xl font-bold text-white">
         {{ $store.state.m.note.title }}
       </h4>
+      <Badge>{{ $store.state.m.note.category.name  }}</Badge>
       <p class="mt-2 font-light text-white text-md">
         {{ $store.state.m.note.description }}
+      </p>
+      <p class="mt-2 font-light text-white text-md">
+        Due date:{{ $store.state.m.note.due_date }}
       </p>
     </blockquote>
   </div>
@@ -16,5 +20,7 @@
 </template>
 
 <script setup>
+import Badge from '../ui/badge/Badge.vue';
+
 
 </script>

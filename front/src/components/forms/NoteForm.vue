@@ -1,4 +1,5 @@
-<script setup lang="ts">
+<script setup >
+import {computed} from 'vue'
 import { useForm } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/zod'
 import * as z from 'zod'
@@ -27,13 +28,13 @@ import { useStore } from 'vuex'
 
 
 const store =useStore()
-
+ 
 
 const formSchema = toTypedSchema(z.object({
   title: z.string().min(2).max(255),
   description: z.string().min(2).max(1000),
   due_date: z.any(),
-  category_id: z.any()
+  category_id: z.any(),
 }))
 
 const form = useForm({
@@ -42,24 +43,16 @@ const form = useForm({
 
 
 if(store.state.m.type === 'edit'){
-  const note = store.state.m.note;
-  // console.log(note);
-  
-  form.setValues({...note, category_id: note.category_id });
+  form.setValues(store.state.m.note);
 }
 
-// console.log(form);
-
+const type = computed(() => store.state.m.type)
 
 const onSubmit = form.handleSubmit((values) => {
-  const { note } = store.state.m
-console.log(note);
-  console.log(values);
-  
-  const { type } = store.state.m
+  const { note } = store.state.m  
   const { id } = store.state.a.authUser
   
-  if(type === 'create'){
+  if(type.value === 'create'){
     store.dispatch('m/createNote', {...values, user_id: id})
   }else{
     if(!values.category_id){
@@ -125,17 +118,10 @@ console.log(note);
         <FormMessage />
       </FormItem>
     </FormField>
-    <FormField v-slot="{ componentField }" name="image">
-      <FormItem>
-        <FormLabel>Image</FormLabel>
-        <FormControl>
-          <Input type="file" v-bind="componentField" />
-        </FormControl>
-        <FormMessage />
-      </FormItem>
-    </FormField>
     <Button type="submit" class="w-full uppercase">
-      {{ $store.state.m.type }}
+      {{ type }}
     </Button>
   </form>
-</template>
+</template> 
+
+

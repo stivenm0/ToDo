@@ -27,7 +27,7 @@ class FortifyServiceProvider extends ServiceProvider
             public function toResponse($request)
             {
 
-                if (! $token = auth()->attempt($request->only(['email', 'password']))) {
+                if (! $token = auth('api')->attempt($request->only(['email', 'password']))) {
                     return response()->json(['error' => 'Unauthorized'], 401);
                 }
                 return response()->json([

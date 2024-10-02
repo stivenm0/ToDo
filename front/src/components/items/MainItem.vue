@@ -9,6 +9,7 @@ import {
 import NoteForm from '../forms/NoteForm.vue';
 import NoteShow from './NoteShow.vue';
 import DeleteForm from '../forms/DeleteForm.vue';
+import ImageForm from '../forms/ImageForm.vue';
 </script>
 
 <template>
@@ -29,6 +30,9 @@ import DeleteForm from '../forms/DeleteForm.vue';
             </template>
             <template v-if="$store.state.m.type === 'delete'">
               <DeleteForm/>
+            </template>
+            <template v-if="$store.state.m.type === 'image'">
+              <ImageForm/>
             </template>
           </div>
         </SheetDescription>
